@@ -77,46 +77,53 @@
 
     <script>
     function convertCSV() {
-        const fileInput = document.getElementById('fileInput');
-        if (!fileInput.files.length) {
-            alert("Pilih file CSV terlebih dahulu.");
-            return;
-        }
-
-        const file = fileInput.files[0];
-        const reader = new FileReader();
-        
-        reader.onload = function(event) {
-            const text = event.target.result;
-            const lines = text.split("\n");
-            let xmlOutput = `<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0"
-                xmlns:content="http://purl.org/rss/1.0/modules/content/"
-                xmlns:wfw="http://wellformedweb.org/CommentAPI/"
-                xmlns:dc="http://purl.org/dc/elements/1.1/"
-                xmlns:atom="http://www.w3.org/2005/Atom"
-                xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
-                xmlns:slash="http://purl.org/rss/1.0/modules/slash/">
-                <channel>\n`;
-            
-            for (let i = 1; i < lines.length; i++) { // Mulai dari baris kedua
-                const cols = lines[i].split(",");
-                if (cols.length < 5) continue;
-                
-                xmlOutput += `    <item>\n` +
-                             `        <title>${cols[0].trim()}</title>\n` +
-                             `        <link>${cols[1].trim()}</link>\n` +
-                             `        <description>${cols[2].trim()}</description>\n` +
-                             `        <pubDate>Tue,${cols[3].trim()}</pubDate>\n` +
-                             `        <enclosure url="${cols[4].trim()}" type="image/jpeg" />\n` +
-                             `    </item>\n`;
-            }
-            
-            xmlOutput += `</channel>\n</rss>`;
-            document.getElementById('output').textContent = xmlOutput;
-        };
-
-        reader.readAsText(file);
+    const fileInput = document.getElementById('fileInput');
+    if (!fileInput.files.length) {
+        alert("Pilih file CSV terlebih dahulu.");
+        return;
     }
+
+    const file = fileInput.files[0];
+    const reader = new FileReader();
+    
+    reader.onload = function(event) {
+        const text = event.target.result;
+        const lines = text.split("\n");
+        const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        
+        let xmlOutput = `<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0"
+            xmlns:content="http://purl.org/rss/1.0/modules/content/"
+            xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+            xmlns:dc="http://purl.org/dc/elements/1.1/"
+            xmlns:atom="http://www.w3.org/2005/Atom"
+            xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+            xmlns:slash="http://purl.org/rss/1.0/modules/slash/">
+            <channel>\n`;
+        
+        for (let i = 1; i < lines.length; i++) { // Mulai dari baris kedua
+            const cols = lines[i].split(",");
+            if (cols.length < 5) continue;
+            
+            const randomDay = days[Math.floor(Math.random() * days.length)];
+            const randomHour = String(Math.floor(Math.random() * 24)).padStart(2, '0');
+            const randomMinute = String(Math.floor(Math.random() * 60)).padStart(2, '0');
+            const randomSecond = String(Math.floor(Math.random() * 60)).padStart(2, '0');
+            
+            xmlOutput += `    <item>\n` +
+                         `        <title>${cols[0].trim()}</title>\n` +
+                         `        <link>${cols[1].trim()}</link>\n` +
+                         `        <description>${cols[2].trim()}</description>\n` +
+                         `        <pubDate>${randomDay}, ${cols[3].trim()} ${randomHour}:${randomMinute}:${randomSecond}</pubDate>\n` +
+                         `        <enclosure url="${cols[4].trim()}" type="image/jpeg" />\n` +
+                         `    </item>\n`;
+        }
+        
+        xmlOutput += `</channel>\n</rss>`;
+        document.getElementById('output').textContent = xmlOutput;
+    };
+
+    reader.readAsText(file);
+}
 </script>
 </body>
 </html>
