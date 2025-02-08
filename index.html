@@ -69,23 +69,30 @@
             reader.onload = function(event) {
                 const text = event.target.result;
                 const lines = text.split("\n");
-                let feedData = [];
-
+                let xmlOutput = `<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0"
+                    xmlns:content="http://purl.org/rss/1.0/modules/content/"
+                    xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+                    xmlns:dc="http://purl.org/dc/elements/1.1/"
+                    xmlns:atom="http://www.w3.org/2005/Atom"
+                    xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+                    xmlns:slash="http://purl.org/rss/1.0/modules/slash/">
+                    <channel>\n`;
+                
                 for (let i = 1; i < lines.length; i++) { // Mulai dari baris kedua
                     const cols = lines[i].split(",");
                     if (cols.length < 5) continue;
                     
-                    let item = {
-                        title: cols[0].trim(),
-                        url: cols[1].trim(),
-                        description: cols[2].trim(),
-                        publish_date: cols[3].trim(),
-                        image_url: cols[4].trim()
-                    };
-                    feedData.push(item);
+                    xmlOutput += `    <item>\n` +
+                                 `        <title>${cols[0].trim()}</title>\n` +
+                                 `        <link>${cols[1].trim()}</link>\n` +
+                                 `        <description>${cols[2].trim()}</description>\n` +
+                                 `        <pubDate>${cols[3].trim()}</pubDate>\n` +
+                                 `        <image>${cols[4].trim()}</image>\n` +
+                                 `    </item>\n`;
                 }
-
-                document.getElementById('output').textContent = JSON.stringify(feedData, null, 2);
+                
+                xmlOutput += `</channel>\n</rss>`;
+                document.getElementById('output').textContent = xmlOutput;
             };
 
             reader.readAsText(file);
