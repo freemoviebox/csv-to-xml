@@ -25,6 +25,12 @@
         input[type="file"] {
             margin: 10px 0;
         }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
         button {
             background: #28a745;
             color: white;
@@ -45,14 +51,22 @@
             overflow-x: auto;
             max-height: 300px;
         }
+        textarea {
+            position: absolute;
+            left: -9999px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h2>Upload File CSV</h2>
         <input type="file" id="fileInput" accept=".csv">
-        <button onclick="convertCSV()">Convert</button>
+        <div class="button-group">
+            <button onclick="convertCSV()">Convert</button>
+            <button onclick="copyOutput()">Copy Output</button>
+        </div>
         <pre id="output"></pre>
+        <textarea id="hiddenTextarea"></textarea>
     </div>
 
     <script>
@@ -96,6 +110,16 @@
             };
 
             reader.readAsText(file);
+        }
+
+        function copyOutput() {
+            const output = document.getElementById('output').textContent;
+            const hiddenTextarea = document.getElementById('hiddenTextarea');
+            hiddenTextarea.value = output;
+            hiddenTextarea.select();
+            hiddenTextarea.setSelectionRange(0, 99999); // Untuk dukungan di mobile
+            document.execCommand("copy");
+            alert("Output berhasil disalin!");
         }
     </script>
 </body>
