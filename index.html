@@ -120,9 +120,17 @@
         
         xmlOutput += `</channel>\n</rss>`;
         document.getElementById('output').textContent = xmlOutput;
+        document.getElementById('hiddenTextarea').value = xmlOutput;
     };
 
     reader.readAsText(file);
+}
+
+function copyOutput() {
+    const hiddenTextarea = document.getElementById('hiddenTextarea');
+    hiddenTextarea.select();
+    document.execCommand("copy");
+    alert("Output berhasil disalin!");
 }
 </script>
 </body>
