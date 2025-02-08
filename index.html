@@ -25,6 +25,11 @@
         input[type="file"] {
             margin: 10px 0;
         }
+        .note {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 10px;
+        }
         .button-group {
             display: flex;
             justify-content: center;
@@ -60,6 +65,7 @@
 <body>
     <div class="container">
         <h2>Upload File CSV</h2>
+        <p class="note">Note: File yang diupload harus berformat CSV dengan susunan <a href="https://tinyurl.com/mwnxb6mh" target="_blank">ext</a>.</p>
         <input type="file" id="fileInput" accept=".csv">
         <div class="button-group">
             <button onclick="convertCSV()">Convert</button>
@@ -68,7 +74,7 @@
         <pre id="output"></pre>
         <textarea id="hiddenTextarea"></textarea>
     </div>
-<center><p>File di upload harus berformat csv dengan susunan ext: https://tinyurl.com/mwnxb6mh</p></center>
+
     <script>
         function convertCSV() {
             const fileInput = document.getElementById('fileInput');
